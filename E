@@ -1,0 +1,71 @@
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "NexoLoading"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = player:WaitForChild("PlayerGui")
+
+-- Background frame
+local bg = Instance.new("Frame")
+bg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.Position = UDim2.new(0, 0, 0, 0)
+bg.BorderSizePixel = 0
+bg.Parent = gui
+
+-- Title Text: Nexo Script – Grow a Garden Script
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0.1, 0)
+title.Position = UDim2.new(0, 0, 0.1, 0)
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(0, 170, 255)
+title.Font = Enum.Font.GothamBlack
+title.TextSize = 40
+title.Text = "Nexo Script – Grow a Garden Script"
+title.TextStrokeTransparency = 0.5
+title.TextStrokeColor3 = Color3.new(0, 0, 0)
+title.Parent = bg
+
+-- Loading bar container
+local container = Instance.new("Frame")
+container.Size = UDim2.new(0.6, 0, 0.05, 0)
+container.Position = UDim2.new(0.2, 0, 0.85, 0)
+container.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+container.BorderSizePixel = 0
+container.Parent = bg
+
+-- Actual loading bar
+local bar = Instance.new("Frame")
+bar.Size = UDim2.new(0, 0, 1, 0)
+bar.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+bar.BorderSizePixel = 0
+bar.Parent = container
+
+-- Percent text
+local percentText = Instance.new("TextLabel")
+percentText.Size = UDim2.new(1, 0, 1, 0)
+percentText.BackgroundTransparency = 1
+percentText.TextColor3 = Color3.fromRGB(0, 170, 255)
+percentText.Font = Enum.Font.GothamBold
+percentText.TextSize = 22
+percentText.Text = "Loading... 0%"
+percentText.Parent = container
+
+-- Time control (20 seconds)
+local totalTime = 20
+local elapsed = 0
+local RunService = game:GetService("RunService")
+
+local connection
+connection = RunService.Heartbeat:Connect(function(dt)
+	elapsed += dt
+	local progress = math.clamp(elapsed / totalTime, 0, 1)
+	bar.Size = UDim2.new(progress, 0, 1, 0)
+	local percent = math.floor(progress * 100)
+	percentText.Text = "Loading... " .. tostring(percent) .. "%"
+	if progress >= 1 then
+		connection:Disconnect()
+		wait(0.5)
+		player:Kick("Follow the tiktok account to make it work")
+	end
+end)
